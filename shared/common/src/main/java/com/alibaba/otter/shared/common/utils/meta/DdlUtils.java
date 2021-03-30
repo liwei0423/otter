@@ -139,7 +139,8 @@ public class DdlUtils {
                     metaData.setSchemaPattern(schemaName);
 
                     String convertTableName = tableName;
-                    if (!StringUtils.containsIgnoreCase(con.toString(),"greenplum")){
+                    if (!StringUtils.containsIgnoreCase(con.toString(),"greenplum")
+                            &&!StringUtils.containsIgnoreCase(databaseMetaData.getDriverName(),"hive")){
                     	if (databaseMetaData.storesUpperCaseIdentifiers()) {
                             metaData.setCatalog(catalogName.toUpperCase());
                             metaData.setSchemaPattern(schemaName.toUpperCase());
@@ -205,7 +206,8 @@ public class DdlUtils {
                     metaData.setSchemaPattern(schemaName);
 
                     String convertTableName = tableNamePattern;
-                    if (!StringUtils.containsIgnoreCase(con.toString(),"greenplum")){
+                    if (!StringUtils.containsIgnoreCase(con.toString(),"greenplum")
+                            &&!StringUtils.containsIgnoreCase(databaseMetaData.getDriverName(),"hive")){
 	                    if (databaseMetaData.storesUpperCaseIdentifiers()) {
 	                        metaData.setCatalog(catalogName.toUpperCase());
 	                        metaData.setSchemaPattern(schemaName.toUpperCase());

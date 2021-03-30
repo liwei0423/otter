@@ -439,6 +439,8 @@ public class DataSourceCreator implements DisposableBean {
 				}
 			}
 			// dbcpDs.setValidationQuery("select 1");
+		} else if (dataMediaType.isHive()){
+			//TODO liwei
 		} else {
 			logger.error("ERROR ## Unknow database type");
 		}

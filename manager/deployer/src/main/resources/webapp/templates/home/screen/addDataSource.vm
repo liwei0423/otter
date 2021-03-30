@@ -140,7 +140,8 @@ function changeform(){
 			ELASTICSEARCH例子 :test74:9300;test75:9300;test76:9300||clustername||indexname<br/>
 			CASSANDRA例子 :test75:2688;test76:2688<br/>
 			HDFS-ARVO例子 :/home/da/hdfs-site.xml||hdfs://test74:8020/Users/data/<br/>
-			media例子 : jdbc:mysql://groupKey=key (更改 key)
+			media例子 : jdbc:mysql://groupKey=key (更改 key)<br/>
+			hive例子 : jdbc:hive2://10.0.40.238:10000/sink
 		</td>
       </tr>
       

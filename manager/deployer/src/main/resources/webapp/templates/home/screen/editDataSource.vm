@@ -22,7 +22,9 @@ function changeform(){
 		$("#dsUrl").html("url:");
 	}else if ($("#sourceType").val()=='ORACLE'){
 		$("#dsUrl").html("url:");
-	}else if (addSourceForm.sourceType.value=='GREENPLUM'){
+	}else if ($("#sourceType").val()=='GREENPLUM'){
+		$("#dsUrl").html("url:");
+	}else if ($("#sourceType").val()=='HIVE'){
 		$("#dsUrl").html("url:");
 	}
 }
@@ -64,8 +66,9 @@ changeform();
         <th>类型：</th>
         <td>
             <select id="sourceType" name="$dataMediaSourceGroup.type.key"  onchange="changeform();">	
-			<option value="ROCKETMQ" #if($source.type.isRocketMq()) selected="selected" #end>ROCKETMQ</option>
-            <option value="HDFS" #if($source.type.isHDFS()) selected="selected" #end>HDFS</option>			
+				<option value="ROCKETMQ" #if($source.type.isRocketMq()) selected="selected" #end>ROCKETMQ</option>
+				<option value="HIVE" #if($source.type.isHive()) selected="selected" #end>HIVE</option>
+            	<option value="HDFS" #if($source.type.isHDFS()) selected="selected" #end>HDFS</option>
             	<option value="KAFKA" #if($source.type.isKafka()) selected="selected" #end>KAFKA</option>
             	<option value="HBASE" #if($source.type.isHBase()) selected="selected" #end>HBASE</option>
             	<option value="ELASTICSEARCH" #if($source.type.isElasticSearch()) selected="selected" #end>ELASTICSEARCH</option>

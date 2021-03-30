@@ -58,7 +58,7 @@ public class DataMediaSourceAction extends AbstractAction {
         		|| dataMediaSource.getType().isCassandra()||dataMediaSource.getType().isElasticSearch()
         		||dataMediaSource.getType().isHBase() ||dataMediaSource.getType().isGreenPlum() 
         		|| dataMediaSource.getType().isHDFS() || dataMediaSource.getType().isKafka() 
-        		|| dataMediaSource.getType().isRocketMq()) {
+        		|| dataMediaSource.getType().isRocketMq() || dataMediaSource.getType().isHive()) {
             DbMediaSource dbMediaSource = new DbMediaSource();
             dataMediaSourceInfo.setProperties(dbMediaSource);
             if (dataMediaSource.getType().isMysql()) {
@@ -67,6 +67,8 @@ public class DataMediaSourceAction extends AbstractAction {
                 dbMediaSource.setDriver("oracle.jdbc.driver.OracleDriver");
             }else if (dataMediaSource.getType().isGreenPlum()) {
                 dbMediaSource.setDriver("com.pivotal.jdbc.GreenplumDriver");
+            }else if (dataMediaSource.getType().isHive()){
+                dbMediaSource.setDriver("org.apache.hive.jdbc.HiveDriver");
             }
             try {
                 dataMediaSourceService.create(dbMediaSource);

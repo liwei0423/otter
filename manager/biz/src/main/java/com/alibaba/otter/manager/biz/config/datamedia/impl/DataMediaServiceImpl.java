@@ -407,7 +407,7 @@ public class DataMediaServiceImpl implements DataMediaService {
             if (dataMediaSource.getType().isMysql() || dataMediaSource.getType().isOracle()
             		||dataMediaSource.getType().isElasticSearch()||dataMediaSource.getType().isCassandra()||dataMediaSource.getType().isGreenPlum()
             		||dataMediaSource.getType().isHBase()||dataMediaSource.getType().isHDFS()||dataMediaSource.getType().isKafka()
-            		||dataMediaSource.getType().isRocketMq()) {
+            		||dataMediaSource.getType().isRocketMq()||dataMediaSource.getType().isHive()) {
                 dataMedia = JsonUtils.unmarshalFromString(dataMediaDo.getProperties(), DbDataMedia.class);
                 dataMedia.setSource(dataMediaSource);
             } else if (dataMediaSource.getType().isNapoli() || dataMediaSource.getType().isMq()) {

@@ -124,7 +124,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.pivotal</groupId>
-			<artifactId>greenplum</artifactId>
+			<artifactId>greenplum-jdbc</artifactId>
 		</dependency>
 		<!-- HDFS-arvo -->
 		<dependency>

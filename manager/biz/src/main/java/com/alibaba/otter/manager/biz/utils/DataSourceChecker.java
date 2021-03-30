@@ -161,8 +161,11 @@ public class DataSourceChecker {
                 dbMediaSource.setType(DataMediaType.ELASTICSEARCH);
             }else if (sourceType.equalsIgnoreCase("ROCKETMQ")) {
                 dbMediaSource.setType(DataMediaType.ROCKETMQ);
+            }else if (sourceType.equalsIgnoreCase("HIVE")){
+                dbMediaSource.setType(DataMediaType.HIVE);
+                dbMediaSource.setDriver("org.apache.hive.jdbc.HiveDriver");
             }
-            if (sourceType.equalsIgnoreCase("MYSQL") || sourceType.equalsIgnoreCase("greenplum") || sourceType.equalsIgnoreCase("ORACLE")){//mysql ,oracle测试
+            if (sourceType.equalsIgnoreCase("MYSQL") || sourceType.equalsIgnoreCase("greenplum") || sourceType.equalsIgnoreCase("ORACLE") || sourceType.equalsIgnoreCase("HIVE") ){//mysql ,oracle测试
             	dataSource = dataSourceCreator.createDataSource(dbMediaSource);
                 try {
                     conn = dataSource.getConnection();
@@ -182,32 +185,34 @@ public class DataSourceChecker {
                 }
                 stmt = conn.createStatement();
                 //测试编码是否一致
-                rs = stmt.executeQuery(sql);
-                while (rs.next()) {
-                    String defaultEncode = null;
-                    if (sourceType.equalsIgnoreCase("MYSQL")) {
-                        defaultEncode = ((String) rs.getObject(2)).toLowerCase();
-                        defaultEncode = defaultEncode.equals("iso-8859-1") ? "latin1" : defaultEncode;
-                        if (!encode.toLowerCase().equals(defaultEncode)) {
-                            return ENCODE_FAIL + defaultEncode;
+                if(StringUtils.isNotBlank(sql)){
+                    rs = stmt.executeQuery(sql);
+                    while (rs.next()) {
+                        String defaultEncode = null;
+                        if (sourceType.equalsIgnoreCase("MYSQL")) {
+                            defaultEncode = ((String) rs.getObject(2)).toLowerCase();
+                            defaultEncode = defaultEncode.equals("iso-8859-1") ? "latin1" : defaultEncode;
+                            if (!encode.toLowerCase().equals(defaultEncode)) {
+                                return ENCODE_FAIL + defaultEncode;
+                            }
+                        } else if (sourceType.equalsIgnoreCase("ORACLE")) {
+                            // ORACLE查询服务器默认字符集需要管理员权限
+                            defaultEncode = ((String) rs.getObject(2)).toLowerCase();
+                            defaultEncode = defaultEncode.equalsIgnoreCase("zhs16gbk") ? "gbk" : defaultEncode;
+                            defaultEncode = defaultEncode.equalsIgnoreCase("us7ascii") ? "iso-8859-1" : defaultEncode;
+                            if (!encode.toLowerCase().equals(defaultEncode)) {
+                                return ENCODE_FAIL + defaultEncode;
+                            }
+                        }else if (sourceType.equalsIgnoreCase("GREENPLUM")){
+                            defaultEncode = ((String) rs.getObject(1)).toLowerCase();
+                            defaultEncode = defaultEncode.equalsIgnoreCase("zhs16gbk") ? "gbk" : defaultEncode;
+                            defaultEncode = defaultEncode.equalsIgnoreCase("us7ascii") ? "iso-8859-1" : defaultEncode;
+                            if (!encode.toLowerCase().equals(defaultEncode)) {
+                                return ENCODE_FAIL + defaultEncode;
+                            }
                         }
-                    } else if (sourceType.equalsIgnoreCase("ORACLE")) {
-                        // ORACLE查询服务器默认字符集需要管理员权限
-                        defaultEncode = ((String) rs.getObject(2)).toLowerCase();
-                        defaultEncode = defaultEncode.equalsIgnoreCase("zhs16gbk") ? "gbk" : defaultEncode;
-                        defaultEncode = defaultEncode.equalsIgnoreCase("us7ascii") ? "iso-8859-1" : defaultEncode;
-                        if (!encode.toLowerCase().equals(defaultEncode)) {
-                            return ENCODE_FAIL + defaultEncode;
-                        }
-                    }else if (sourceType.equalsIgnoreCase("GREENPLUM")){
-                    	defaultEncode = ((String) rs.getObject(1)).toLowerCase();
-                    	defaultEncode = defaultEncode.equalsIgnoreCase("zhs16gbk") ? "gbk" : defaultEncode;
-                        defaultEncode = defaultEncode.equalsIgnoreCase("us7ascii") ? "iso-8859-1" : defaultEncode;
-                        if (!encode.toLowerCase().equals(defaultEncode)) {
-                            return ENCODE_FAIL + defaultEncode;
-                        }
-                    }
 
+                    }
                 }
             }else if (sourceType.equalsIgnoreCase("KAFKA")){
             	if (dataSourceCreator.getProducer(dbMediaSource)==null){
